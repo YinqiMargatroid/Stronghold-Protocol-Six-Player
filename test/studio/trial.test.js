@@ -94,8 +94,11 @@ test('watchdog kills a real non-responsive child process and allows the next job
   const b = bench(f, { spawn: (_entry, args, options) => (child = fork(entry, args, options)), limits: { ...TRIAL_LIMITS, timeoutMs: 400 } });
   t.after(() => b.close());
   await assert.rejects(b.run({ id }), { code: 'PLUGIN_STUDIO_TRIAL_TIMEOUT' });
-  // Windows taskkill may reap the child before child.kill() runs, leaving child.killed false.
-  assert.equal(child.killed || child.exitCode !== null || child.signalCode !== null, true);
+  // the child never exits by itself, and the job ends on its exit: it was killed. On Windows the watchdog's
+  // taskkill /T /F ends the tree first, so child.kill() finds it gone and `killed` stays false — look at the process
+  assert.ok(child.exitCode !== null || child.signalCode !== null, 'the job ended after the child exited');
+  assert.throws(() => process.kill(child.pid, 0), { code: 'ESRCH' });
+  if (process.platform !== 'win32') assert.equal(child.killed, true);
   assert.equal(b.active(), 0);
 });
 
