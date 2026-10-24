@@ -22,6 +22,7 @@ test('release tags drop a trailing -dev and keep an already released version', (
   assert.equal(releaseTag('0.2.6'), 'v0.2.6-six-player.1');
   assert.equal(releaseTag('0.3.0'), 'v0.3.0-six-player.1');
   assert.equal(releaseTag('0.3.1'), 'v0.3.1-six-player.1');
+  assert.equal(releaseTag('0.3.2'), 'v0.3.2-six-player.1');
   assert.equal(releaseTag('0.2.4'), 'v0.2.4');
   assert.equal(releaseTag('9.9.9'), 'v9.9.9');
 });
@@ -33,7 +34,8 @@ test('the packaged package.json keeps only scripts whose node files ship', () =>
   for (const name of KEPT) assert.equal(next.scripts[name], pkg.scripts[name], name);
   assert.deepEqual(Object.keys(next), Object.keys(pkg));
   assert.deepEqual(playerPackageProblems(pkg, shipped), []);
-  assert.match(pkg.scripts.test, /^node --test "/, 'the repository package.json still runs the suite (tools/ci.mjs TEST_FILES)');
+  assert.equal(pkg.scripts.test, 'node tools/test-run.mjs',
+    'the repository package.json still runs the suite (tools/test-run.mjs over tools/ci.mjs TEST_FILES)');
   assert.equal(pkg.scripts.lint, 'eslint .');
   const keys = Object.keys(next);
   assert.deepEqual(keys.filter((k) => k !== 'scripts'), Object.keys(pkg).filter((k) => k !== 'scripts'));

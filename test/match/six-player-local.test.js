@@ -12,11 +12,54 @@ import { normalizeSeats } from '../../public/js/screens/room.js';
 import { parseArgs as parseLaunchArgs } from '../../scripts/launch.mjs';
 import { normalizeSp } from '../../public/js/ui/gameLogic/draft.js';
 import { DATA, give, legalTileFor, makeMatch } from './harness.js';
+import { getVersionData, setData } from '../../server/data.js';
+import { setGameData } from '../../server/sim/content/support/index.js';
+import { VERSIONS } from '../../shared/versions.js';
 
 const BEACON = 'chess_item_5_04_e_a';
 const MODE = 'mode_multi_hard';
 const ids = Array.from({ length: 6 }, (_, i) => `p_${i}`);
 const beacons = (ps) => [...ps.hand, ...ps.temp].filter((p) => p?.id === BEACON);
+
+for (const version of VERSIONS) {
+  test(`${version.id}: five/six-seat rules use this version's data and preserve all boss fields`, () => {
+    const data = getVersionData(version.id);
+    setData(data);
+    setGameData(data);
+    try {
+      const baseline = new GameData(data, MODE, 4);
+      for (const count of [5, 6]) {
+        const h = makeMatch({ data, version: version.id, humans: count, difficulty: 'HARD', fake: true, seed: 159, clientCombat: true, clients: false }).start();
+        try {
+          h.toPrep(1);
+          const m = h.m;
+          assert.equal(m.startingPlayerCount, count);
+          const bans = baseline.bans('HARD');
+          assert.deepEqual(m.gd.bans('HARD'), { core: Math.max(0, bans.core - (count - 4)), addon: bans.addon });
+          for (const id of baseline.visibleChess) assert.equal(m.gd.poolCopies(id), baseline.poolCopies(id));
+          m.startRound(10);
+          m.startRound(10);
+          for (const ps of m.order) assert.equal(beacons(ps).filter((p) => p.meta.sixPlayerBeaconRound === 10).length, 1);
+          m.round = m.gd.bossRound;
+          for (const ps of m.order) ps.lp = 100;
+          m.startFinalAssault(false);
+          assert.deepEqual(m.fields.map((f) => f.players.length).sort(), count === 5 ? [1, 2, 2] : [2, 2, 2]);
+          assert.equal(m.bossPool.maxHp, baseline.bossPoolHp(m.bossId, 4) * (count === 5 ? 1.5 : 2));
+          h.invariants();
+        } finally { h.m.dispose(); }
+        const forced = structuredClone(data);
+        forced.choices.schedule[MODE].rounds[3].families = [{ family: 'bounty', weight: 1 }];
+        const draft = generateDraft(new GameData(forced, MODE, count), createRng(159), 3);
+        assert.equal(draft.cards.length, 9);
+        assert.equal(new Set(draft.cards.map((card) => card.id)).size, 9);
+        assert.deepEqual(draft.cards.slice(6).map((card) => card.tier), [1, 2, 2]);
+      }
+    } finally {
+      setData(DATA);
+      setGameData(DATA);
+    }
+  });
+}
 
 test('round-10 beacon launch flags stay out of asset setup arguments', () => {
   const off = parseLaunchArgs(['--no-round10-beacon', '--asset-source=mirror']);
