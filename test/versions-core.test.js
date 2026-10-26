@@ -5,7 +5,7 @@ import { DataSource } from '../server/sim/simdata.js';
 import { setGameData } from '../server/sim/content/support/index.js';
 import { createRegistry } from '../server/match/effectsMeta.js';
 import { makeBattle, chessRec, enemyRec } from './helpers/battleHarness.js';
-import { makeMatch, give, giveItem, legalTileFor } from './match/harness.js';
+import { makeMatch, give, giveItem } from './match/harness.js';
 import { buildBattleSpec, createBattleFromSpec } from '../server/sim/spec.js';
 
 const current = getData();
@@ -82,21 +82,16 @@ for (const id of ids.slice(0, 2)) {
     coop.m.dispose();
   }));
 
-  test(`${id}: bench equipment and full bench swaps fail without moving pieces`, () => inVersion(id, (data) => {
+  test(`${id}: bench equipment still fails without moving pieces`, () => inVersion(id, (data) => {
     const h = makeMatch({ data, registry: createRegistry(), fake: true }).start().toPrep();
     const ps = h.ps('p_0');
     const opId = h.m.gd.visibleChess[0];
     const itemId = Object.keys(data.items).find((k) => data.items[k].effectId === 'eff_acarm055');
     const held = give(h.m, ps, opId);
     const item = giveItem(h.m, ps, itemId);
-    assert.ok(ps.equip(item.uid, held.uid).error);
-    const at = legalTileFor(h.m, ps, opId);
-    const board = give(h.m, ps, opId, 'board', at);
-    for (let i = 0; i < ps.hand.length; i++) if (!ps.hand[i]) ps.hand[i] = ps.newPiece('chess', opId);
-    const idx = ps.hand.indexOf(held);
-    assert.equal(ps.move(board.uid, { area: 'hand', idx }).error, 'HAND_FULL');
-    assert.equal(ps.move(held.uid, { area: 'board', row: at[0], col: at[1] }).error, 'HAND_FULL');
-    assert.equal(ps.find(board.uid).area, 'board');
+    const before = ps.privateView();
+    assert.equal(ps.equip(item.uid, held.uid).error, 'BAD_TARGET');
+    assert.deepEqual(ps.privateView(), before);
     h.m.dispose();
   }));
 

@@ -5,7 +5,7 @@ the **UI owner** consuming `m.public` / `m.private` / `m.result`, and anyone dri
 Normative contracts stay in DESIGN.md §6 and §8 ([design/match.md](design/match.md),
 [design/network.md](design/network.md)); this file documents the implementation and every assumption it makes.
 
-For this isolated 0.3.2 six-player checkout, [LOCAL-SIX-PLAYER.md](LOCAL-SIX-PLAYER.md) specifies the starting-roster BAN adjustment, unchanged shared pool multiplier, nine-card bounty draft for five/six-seat rooms, a 1.5× five-seat or 2× six-seat boss pool relative to the four-seat baseline, and optional (default-on for five/six-seat starts) round-10-only 信标 supply. `beaconSupply.js` identifies that fixed reward, and `SharedItemPool` excludes it from shop stock.
+For this isolated 0.3.3 six-player checkout, [LOCAL-SIX-PLAYER.md](LOCAL-SIX-PLAYER.md) specifies the starting-roster BAN adjustment, unchanged shared pool multiplier, nine-card bounty draft for five/six-seat rooms, a 1.5× five-seat or 2× six-seat boss pool relative to the four-seat baseline, and optional (default-on for five/six-seat starts) round-10-only 信标 supply. `beaconSupply.js` identifies that fixed reward, and `SharedItemPool` excludes it from shop stock.
 
 ```
 server/match/
@@ -675,7 +675,9 @@ Any `choice:` handler whose EffectRef reuses its own key must guard like this (o
 * **Shop**: `shopSlots[level]` chess slots + item slot(s), copy-weighted rolls over remaining pool copies of unbanned,
   visible chess with tier ≤ level; item slot: tier by the same shares, uniform item within the tier. Level-up price =
   base per mode, −1 each round start (floor 0), reset to the next base after upgrading; an upgrade opens the new level's
-  extra slots at once, empty (the cards shown stay; the empty slots fill on the next roll); `MAX_LEVEL` at 6. One freeze
+  extra slots at once, empty (the cards shown stay; the empty slots fill on the next roll); `MAX_LEVEL` at 6. The
+  private view's `shop.layout: { chess, item }` preserves empty equipment positions: 第一期 opens its first equipment
+  slot at level 5, 第二期 at level 1 (all lobby difficulties). An unopened slot is not sold out; see §36.1. One freeze
   toggle freezes every unsold slot until the next round start; a manual refresh rerolls everything (new slots stay
   frozen). Unfrozen slots are cleared at combat start. Slot positions are stable (frozen slots keep their index).
 * **Pool**: copies 12/14/18/16/8/5 (缪尔赛思 4); a normal piece holds 1 copy, an elite 3; displays never reserve copies;
@@ -735,7 +737,12 @@ Any `choice:` handler whose EffectRef reuses its own key must guard like this (o
   the hand / temp (kept through the next prep, see Hand). In a boss round's prep the tile is read on the player's half of
   the boss field (board coordinates unchanged). `onMerge` carries `area` ('board' | 'hand' | 'temp').
 * **Board**: rows 9–12 × cols 2–10, legality from `stages[id].tiles` + devices (board.js); deploy cap 8 (+effects);
-  summons don't use slots; board↔hand swaps always allowed. The legend's `buildable` is the effective deploy type: the
+  summons don't use slots; legal chess board↔hand swaps in either direction reuse the occupied slots, even with a full
+  hand and at the deploy cap. This applies to all four official versions. **INTENTIONAL DEVIATION (有意偏差):**
+  after reviewing [official news 5114](https://ak.hypergryph.com/news/5114), the maintainer decided on 2026-10-25
+  that 第一期上／下半 also allow this swap; the official first period did not, and the second period added it
+  ([§36.2](history/0.3.3.md)). Other phase/ready, terrain, summon,
+  purchase, reward and actual-addition limits still apply. The legend's `buildable` is the effective deploy type: the
   深水区 (`tile_deepsea`, 战场#08's pool — level buildableType ALL) refuses deployment (PRTS 深水区 地形信息
   "拒绝部署（待补充）"; a 特制水上平台 device makes its tile deployable for any unit; player report #3 after 0.1.0). A
   terrain change (terrain 机变 cards such as 模拟战场演变·模式二 "阻隔工事变为射击台", content `setDeviceActive` /

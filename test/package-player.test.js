@@ -23,6 +23,7 @@ test('release tags drop a trailing -dev and keep an already released version', (
   assert.equal(releaseTag('0.3.0'), 'v0.3.0-six-player.1');
   assert.equal(releaseTag('0.3.1'), 'v0.3.1-six-player.1');
   assert.equal(releaseTag('0.3.2'), 'v0.3.2-six-player.1');
+  assert.equal(releaseTag('0.3.3'), 'v0.3.3-six-player.1');
   assert.equal(releaseTag('0.2.4'), 'v0.2.4');
   assert.equal(releaseTag('9.9.9'), 'v9.9.9');
 });

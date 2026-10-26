@@ -59,7 +59,7 @@
 // file are removed, so a player never gets a run that reports zero tests and exits 0. The same stage rewrites the
 // shipped Markdown (GitHub #530): a relative link whose target is in the zip stays relative; a picture becomes
 // <repo>/raw/<tag>/<path>; another missing file becomes <repo>/blob/<tag>/<path>; `../../releases/latest` becomes
-// the repository releases/latest URL. This six-player fork's 0.2.5, 0.2.6, 0.3.0, 0.3.1 and 0.3.2 packages point to their own release tags; other
+// the repository releases/latest URL. This six-player fork's 0.2.5, 0.2.6, 0.3.0, 0.3.1, 0.3.2 and 0.3.3 packages point to their own release tags; other
 // versions use `v` plus the package version with a trailing `-dev` removed. The git checkout stays relative.
 // The account name comes from the OS at run time (never written in the repository): SP_PACKAGE_SCAN_USER=0 skips it
 // (a name that is a common word), SP_PACKAGE_SCAN_NAMES=a,b adds more names to refuse.
@@ -154,6 +154,8 @@ export const SIX_PLAYER_RELEASE_TAG_030 = 'v0.3.0-six-player.1';
 export const SIX_PLAYER_RELEASE_TAG_031 = 'v0.3.1-six-player.1';
 /** Current six-player release tag for 0.3.2 player bundles. */
 export const SIX_PLAYER_RELEASE_TAG_032 = 'v0.3.2-six-player.1';
+/** Current six-player release tag for 0.3.3 player bundles. */
+export const SIX_PLAYER_RELEASE_TAG_033 = 'v0.3.3-six-player.1';
 
 /**
  * THE SWITCH for the Japanese voice dub in the full zip (`audio.voiceJp` of data/assets.json: 2674 files under
@@ -455,7 +457,7 @@ export function playerPackageProblems(pkg, files) {
 }
 
 /**
- * This fork's 0.2.5, 0.2.6, 0.3.0, 0.3.1 and 0.3.2 bundles point at their six-player release tags. Other versions use `v` + version,
+ * This fork's 0.2.5, 0.2.6, 0.3.0, 0.3.1, 0.3.2 and 0.3.3 bundles point at their six-player release tags. Other versions use `v` + version,
  * with a trailing `-dev` removed (`0.2.5-dev` → `v0.2.5`, `0.2.4` → `v0.2.4`).
  * [ASSUMED] an unreleased `-dev` build points player docs at the tag that version will use.
  * @param {string} version
@@ -466,6 +468,7 @@ export function releaseTag(version) {
   if (version === '0.3.0') return SIX_PLAYER_RELEASE_TAG_030;
   if (version === '0.3.1') return SIX_PLAYER_RELEASE_TAG_031;
   if (version === '0.3.2') return SIX_PLAYER_RELEASE_TAG_032;
+  if (version === '0.3.3') return SIX_PLAYER_RELEASE_TAG_033;
   return `v${String(version ?? '').replace(/-dev$/, '')}`;
 }
 

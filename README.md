@@ -2,11 +2,11 @@
 
 《明日方舟》季节性自走棋塔防玩法「卫戍协议：盟约」的**非官方同人复刻**：浏览器即开即玩，单人或 1–6 人联机合作。
 
-> **社区六人分支（基于上游 0.3.2）**：这是 [原项目](https://github.com/sganggs/Stronghold-Protocol) 的独立 fork，并非原项目发布版或官方玩法。只移植与人数直接相关的规则，未加入上游以外的盟约、干员或场景；开局 5 或 6 人的对局默认在第 10 回合发放额外补给信标，可用启动参数关闭。规则依据、验证结果和后续同步方法见 [六人分支说明](docs/LOCAL-SIX-PLAYER.md)。本 fork 的 [Releases](https://github.com/YinqiMargatroid/Stronghold-Protocol-Six-Player/releases) 提供六人版整合包；原项目发布的四人版整合包和更新包不能用于本分支。
+> **社区六人分支（基于上游 0.3.3）**：这是 [原项目](https://github.com/sganggs/Stronghold-Protocol) 的独立 fork，并非原项目发布版或官方玩法。只移植与人数直接相关的规则，未加入上游以外的盟约、干员或场景；开局 5 或 6 人的对局默认在第 10 回合发放额外补给信标，可用启动参数关闭。规则依据、验证结果和后续同步方法见 [六人分支说明](docs/LOCAL-SIX-PLAYER.md)。本 fork 的 [Releases](https://github.com/YinqiMargatroid/Stronghold-Protocol-Six-Player/releases) 提供六人版整合包；原项目发布的四人版整合包和更新包不能用于本分支。
 
-## 相较于上游 0.3.1 的改动
+## 相较于上游 0.3.3 的改动
 
-本分支已合并[上游 0.3.1 基线提交 `c9d804f4`](https://github.com/sganggs/Stronghold-Protocol/commit/c9d804f470b8d7422ae04eb66faf671cef21ad52)。BAN、悬赏、首领血量和固定信标以**开局座位数**计算（包括 AI），离开或淘汰后不重新计算；首领分场则以当时的存活人数计算。
+本分支已合并[上游 0.3.3 发布提交 `f07b8965`](https://github.com/sganggs/Stronghold-Protocol/commit/f07b8965061bbc311ad7aa815879b09264a1e47d)。BAN、悬赏、首领血量和固定信标以**开局座位数**计算（包括 AI），离开或淘汰后不重新计算；首领分场则以当时的存活人数计算。
 
 | 项目 | 本六人分支的新增或调整 |
 |---|---|
@@ -16,11 +16,11 @@
 | 悬赏选卡 | 开局 5 或 6 人时，悬赏轮选由 6 张增至 9 张：额外 3 张现有击杀悬赏（Ⅰ / Ⅱ / Ⅱ 阶，奖励 1 / 2 / 2）；前端显示全部 9 张并允许选择第 7–9 张。其他选卡类别仍为 6 张。 |
 | 固定信标补给 | 开局 5 或 6 人时默认仅在第 10 回合给每位存活玩家 1 个普通信标；4 人及以下无此固定补给。开服参数 `--no-round10-beacon` 可关闭，`--round10-beacon` 可明确开启；不影响商店里的普通信标。 |
 
-共享干员卡池继续使用上游 0.3.1 的 `economy.poolCopies` 基础数量和 `economy.coopPoolMultiplier = 2`，**本分支没有再按人数扩容卡池**。本分支也没有加入新盟约、干员、物品或场景内容。规则细节和测试见[六人分支说明](docs/LOCAL-SIX-PLAYER.md)。
+共享干员卡池继续使用上游 0.3.3 的 `economy.poolCopies` 基础数量和 `economy.coopPoolMultiplier = 2`，**本分支没有再按人数扩容卡池**。本分支也没有加入新盟约、干员、物品或场景内容。规则细节和测试见[六人分支说明](docs/LOCAL-SIX-PLAYER.md)。
 
 Windows 可在项目根目录双击 **`start-server.cmd`** 手动开服。它会调用自带的启动流程，优先使用镜像补齐素材，照常检查并提取场景，且不自动打开浏览器；附加启动参数会原样透传，例如 `start-server.cmd --no-round10-beacon`。本脚本已纳入源码和六人版整合包。
 
-![version](https://img.shields.io/badge/version-0.3.2-2ea44f)
+![version](https://img.shields.io/badge/version-0.3.3-2ea44f)
 ![license](https://img.shields.io/badge/code%20license-GPL--3.0--or--later-blue)
 ![node](https://img.shields.io/badge/node-22%20%7C%2024-339933)
 
@@ -44,7 +44,7 @@ English summary: [below](#english).
 
 ## 目录
 
-- [相较于上游 0.3.1 的改动](#相较于上游-031-的改动) · [声明](#声明) · [简介](#简介) · [功能一览](#功能一览)
+- [相较于上游 0.3.3 的改动](#相较于上游-033-的改动) · [声明](#声明) · [简介](#简介) · [功能一览](#功能一览)
 - [快速开始](#快速开始)：[整合包](#方式一整合包推荐) · [从源码运行](#方式二从源码运行) · [系统要求](#系统要求) · [端口与配置](#端口与配置) · [局域网联机](#和朋友一起玩局域网)
 - [插件](#插件) · [联机方式](#联机方式) · [操作](#操作) · [文档](#文档) · [开发与测试](#开发与测试) · [项目结构](#项目结构)
 - [许可证](#许可证) · [致谢与数据来源](#致谢与数据来源) · [贡献](#贡献)
@@ -55,7 +55,7 @@ English summary: [below](#english).
 
 - **独立模拟**（单人）与**同盟模拟**（1–6 人**合作**，没有 PvP；空位可以加 AI 队友）。
 - 服务器是一个 Node.js 程序，**战斗在各玩家的浏览器里模拟**（和官方一样），服务器只管经济与回合，一台低功耗小主机就能开服。
-- 当前版本 0.3.2：默认提供四个官方版本切换，补齐早期版本规则、干员技能与头像／模型／特效；重做战斗伤判结算并修复首领技能节奏，更新大厅、等待室、调配与开场界面，增加界面大小、观战者接替 AI 等设置，并补齐社区反馈、插件与开服稳定性修复，详见 [CHANGELOG.md](CHANGELOG.md)。仍有少数规则按推断实现，与官方不一致的地方欢迎在 Issue 里反馈。
+- 当前版本 0.3.3：0.3.2 的热修复，修正第一期商店装备空栏与跨版本装备图标缓存；第一期上／下半也允许满整备区互换（维护者决定的有意偏差）。默认仍提供四个官方版本，详见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 功能一览
 
@@ -84,9 +84,9 @@ English summary: [below](#english).
 
 [六人版 Releases](https://github.com/YinqiMargatroid/Stronghold-Protocol-Six-Player/releases/latest) 提供以下包：
 
-- **完整包** `Stronghold-Protocol-Six-Player-v0.3.2-six-player.1.zip`：含运行依赖、五种语言的干员语音、官方 3D 棋盘、战场场景和官方战斗特效。解压后可直接运行。**推荐。**
-- **精简包** `Stronghold-Protocol-Six-Player-v0.3.2-six-player.1-lite.zip`：含程序和运行依赖，首次启动下载公开素材（约 720 MB）；官方 3D 棋盘与战斗特效等本地客户端素材需要自行提取或从同版本完整包复制。
-- **更新包** `Stronghold-Protocol-Six-Player-v0.3.2-six-player.1-update.zip`：用于此前六人版 0.3.1 完整包安装目录；停服后覆盖解压再启动。请勿用于上游四人版或其他版本。
+- **完整包** `Stronghold-Protocol-Six-Player-v0.3.3-six-player.1.zip`：含运行依赖、五种语言的干员语音、官方 3D 棋盘、战场场景和官方战斗特效。解压后可直接运行。**推荐。**
+- **精简包** `Stronghold-Protocol-Six-Player-v0.3.3-six-player.1-lite.zip`：含程序和运行依赖，首次启动下载公开素材（约 720 MB）；官方 3D 棋盘与战斗特效等本地客户端素材需要自行提取或从同版本完整包复制。
+- **更新包** `Stronghold-Protocol-Six-Player-v0.3.3-six-player.1-update.zip`：用于此前六人版 0.3.2 完整包安装目录；停服后覆盖解压再启动。请勿用于上游四人版或其他版本。
 
 两种包都包含运行和部署文件，以及插件作者需要的工具、模板、Schemas、插件文档和战斗测试助手。完整开发测试与设计文档仍在源码仓库里。
 
@@ -293,11 +293,11 @@ node tools/perfbench.mjs --cpu 1,4,6 --profile             # 真实战斗的帧�
 
 ## English
 
-An **unofficial, non-commercial fan remake** of Arknights' seasonal auto-chess tower-defense mode *Stronghold Protocol: Alliance*, played in the browser: solo, or 1–6 player co-op (AI teammates can fill seats). This community fork applies seat-related rules to upstream 0.3.1, with a local round-10-only beacon supply enabled by default and configurable at launch. The fork's Releases provide six-seat full, lite and update bundles; upstream Releases contain the four-seat build and cannot update this fork. See [the branch notes](docs/LOCAL-SIX-PLAYER.md) for sources, verification and upstream sync steps. Combat is simulated in each player's browser, so a low-power PC can host.
+An **unofficial, non-commercial fan remake** of Arknights' seasonal auto-chess tower-defense mode *Stronghold Protocol: Alliance*, played in the browser: solo, or 1–6 player co-op (AI teammates can fill seats). This community fork applies seat-related rules to upstream 0.3.3, with a local round-10-only beacon supply enabled by default and configurable at launch. The fork's Releases provide six-seat full, lite and update bundles; upstream Releases contain the four-seat build and cannot update this fork. See [the branch notes](docs/LOCAL-SIX-PLAYER.md) for sources, verification and upstream sync steps. Combat is simulated in each player's browser, so a low-power PC can host.
 
 To run this six-seat fork from source, clone its `master` branch and follow the source setup steps above.
 
-- **Run:** download the full six-seat bundle `Stronghold-Protocol-Six-Player-v0.3.2-six-player.1.zip` (including all operator voice dubs, official battlefield scenes and effects) from [this fork's Releases](https://github.com/YinqiMargatroid/Stronghold-Protocol-Six-Player/releases/latest), or use its lite bundle and download public art on first start. The update bundle upgrades an existing six-seat 0.3.0 full installation. Install Node.js 22 or 24, then double-click the root `start-server.cmd` (Windows: mirror-first asset setup, scene extraction, no automatic browser) or run `./scripts/start.sh` (macOS / Linux) and open <http://localhost:3000>. From source: `npm install && npm run setup && npm start`; the local Arknights client provides optional 3D board and official effects assets, which are included in the full bundle.
+- **Run:** download the full six-seat bundle `Stronghold-Protocol-Six-Player-v0.3.3-six-player.1.zip` (including all operator voice dubs, official battlefield scenes and effects) from [this fork's Releases](https://github.com/YinqiMargatroid/Stronghold-Protocol-Six-Player/releases/latest), or use its lite bundle and download public art on first start. The update bundle upgrades an existing six-seat 0.3.2 full installation. Install Node.js 22 or 24, then double-click the root `start-server.cmd` (Windows: mirror-first asset setup, scene extraction, no automatic browser) or run `./scripts/start.sh` (macOS / Linux) and open <http://localhost:3000>. From source: `npm install && npm run setup && npm start`; the local Arknights client provides optional 3D board and official effects assets, which are included in the full bundle.
 - **Languages:** Chinese (the default), English, 日本語, 한국어 and 繁體中文 — switch on the title screen or in Settings. Game texts come from the official clients; the Japanese, Korean and Traditional Chinese interface strings are machine translations (corrections welcome: [docs/I18N.md](docs/I18N.md)).
 - **Play with friends:** create a co-op room and share the 4-letter key or the `?room=KEY` link. On a LAN, use the address printed at start; otherwise use a virtual-LAN tool, a tunnel or a VPS — see [docs/DEPLOY.md](docs/DEPLOY.md).
 - **Disclaimer:** not affiliated with or endorsed by Hypergryph or Yostar. All Arknights names, art, audio, text and data are © their respective owners and are **not** covered by this project's GPL licence. For study and personal non-commercial use only — no selling, paid distribution, paid servers or monetisation of any kind. Content will be removed on request of the rights holders. Provided "as is", without warranty.
